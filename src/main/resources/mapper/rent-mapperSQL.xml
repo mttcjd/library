@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="rent">
+	<select id="totalRentOfLibrary" parameterType="search" resultType="_int">
+		select 
+			count(*) cnt 
+		from 
+			rent_tbl r, book_tbl b, member_tbl m
+	  	where 
+	  		r.rent_book = b.book_idx
+	  		and r.rent_id = m.member_id
+        	and book_lib = #{memberId}
+        	<if test="genre!=null and genre!=''">
+				and book_genre = #{genre}
+			</if>
+			<if test="searchVal != null and searchVal != ''">
+				<if test="searchType.equals('name')">
+					and LOWER(book_name) like LOWER('%'||#{searchVal}||'%')
+				</if>
+				<if test="searchType.equals('author')">
+					and LOWER(book_author) like LOWER('%'||#{searchVal}||'%')
+				</if>
+				<if test="searchType.equals('publisher')">
+					and LOWER(book_publisher) like LOWER('%'||#{searchVal}||'%')
+				</if>
+			</if>
+	</select>
+	<select id="rentListOfLibrary" parameterType="search" resultType="rent">
+		select 
+  			rnum,
+  			rent_idx as rentIdx,
+            rent_id as rentId,
+            member_name as memberName,
+            phone,
+  			rent_book as rentBook,
+            book_name as bookName,
+            book_author as bookAuthor,
+  			TO_CHAR(rent_date,'YYYY-MM-DD') as rentDate,
+  			TO_CHAR(due_date,'YYYY-MM-DD') as dueDate,
+  			TO_CHAR(return_date,'YYYY-MM-DD') as returnDate,
+  			rent_state as rentState
+	  	from ( select 
+	  				rownum rnum,
+	  				rt.* 
+	  			from (select * from rent_tbl r, book_tbl b, member_tbl m
+	  			where 
+                    r.rent_book = b.book_idx
+                    and r.rent_id = m.member_id
+                    and book_lib = #{memberId}
+                    <if test="genre!=null and genre!=''">
+						and book_genre = #{genre}
+					</if>
+					<if test="searchVal != null and searchVal != ''">
+						<if test="searchType.equals('name')">
+							and LOWER(book_name) like LOWER('%'||#{searchVal}||'%')
+						</if>
+						<if test="searchType.equals('author')">
+							and LOWER(book_author) like LOWER('%'||#{searchVal}||'%')
+						</if>
+						<if test="searchType.equals('publisher')">
+							and LOWER(book_publisher) like LOWER('%'||#{searchVal}||'%')
+						</if>
+					</if>
+	  			order by 1 desc
+	  			
+	  			) rt
+  			 )
+  		where 
+  			rnum between #{start} and #{end}
+	</select>
+	<update id="returnBook" parameterType="rent">
+		{call
+			declare
+			BEGIN
+	
+		        update
+		        	rent_tbl
+		        set
+		        	return_date = sysdate
+		        where
+		        	rent_idx = #{rentIdx};
+		        	
+		        insert into
+		        	alarm_tbl
+		        values
+		        	(alarm_seq.nextval,
+		        	(select book_reserve_id from book_tbl where book_idx = #{rentBook}),
+		        	(select book_name from book_tbl where book_idx = #{rentBook}),
+		        	sysdate);
+		        	
+		        update
+		        	book_tbl
+		        set
+		        	book_state = 0,
+		        	book_reserve_id = null
+		        where
+		        	book_idx = #{rentBook};
+	    	END
+	    }
+	</update>
+	<update id="reserveBook" parameterType="rent">
+		update
+        	book_tbl
+        set
+        	book_reserve_id = #{rentId}
+        where
+        	book_idx = #{rentBook}
+	</update>
+	<select id="alarm" parameterType="string" resultType="alarm">
+		select
+			alarm_idx as alarmIdx,
+			alarm_book as alarmBook,
+			alarm_date as alarmDate
+		from
+			alarm_tbl
+		where
+			alarm_id = #{memberId}
+	</select>
+</mapper>

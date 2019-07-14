@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">	<title>study_contact</title>
+	<link rel="stylesheet" type="text/css" href="../css/reset.css">
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+</head>
+<body>
+<div class="container">
+	<header>
+		<a href="index.html" class="logo">STUDY-LIBIRARY</a>
+		<div class="menu">
+			<a href="login.html">로그인</a>
+			<a href="join.html">회원가입</a>
+		</div>
+	</header>
+	<div class="content">
+		<div class="subMenu">
+			<a href="bookSearch.html">도서 검색</a>
+			<a href="rentListMember.html">대여 내역</a>
+			<a href="myInfoChk.html">내 정보수정</a>
+			<a href="leave.html">회원 탈퇴</a>
+		</div>
+
+		<section>
+			<div class="bookSearchGroup">
+				<span class="sbox long">
+					<select>
+						<option>도서관 선택 </option>
+					</select>
+				</span>
+				<span class="sbox">
+					<select>
+						<option>제목</option>
+						<option>저자</option>
+						<option>출판사</option>
+					</select>
+				</span>
+				<span class="sbox">
+					<select>
+						<option>장르</option>
+						<option>A</option>
+						<option>B</option>
+					</select>
+				</span>
+				<span class="sbox">
+					<select>
+						<option>정렬</option>
+						<option>제목 오름차순</option>
+						<option>제목 내림차순</option>
+						<option>저자 오름차순</option>
+						<option>출판사 오름차순</option>
+						<option>출판사 내림차순</option>
+					</select>
+				</span>
+				<input class="tbox">
+				<a href="#none" class="btn table">검색</a>
+			</div>
+			<div class="bookListGroup">
+				<div class="sectionTitle">검색 내역</div>
+				<ul class="bookList">
+					<li class="msg">
+						검색어를 입력해주세요.
+					</li>
+				</ul>
+			</div>
+			<div class="paging">
+				<a href="#none">이전</a>
+				<a href="#none" class="on">1</a>
+				<a href="#none">2</a>
+				<a href="#none">3</a>
+				<a href="#none">다음</a>
+			</div>
+		</section>
+	</div>
+	<footer>
+		Second project in study 190526 : library
+
+	</footer>
+</div>
+
+<script src="../js/jquery-3.1.1.min.js"></script>
+</body>
+</html>

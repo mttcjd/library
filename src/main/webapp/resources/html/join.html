@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>study_contact</title>
+	<link rel="stylesheet" type="text/css" href="../css/reset.css">
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+</head>
+<body>
+<div class="container">
+	<header>
+		<a href="index.html" class="logo">STUDY-LIBRARY</a>
+		<div class="menu">
+			<a href="login.html">로그인</a>
+			<a href="join.html">회원가입</a>
+		</div>
+	</header>
+	<div class="content">
+		<section>
+			<div class="joinBox">
+				<table class="set">
+					<tr>
+						<th>회원 구분</th>
+						<td>
+							<label>
+								<input type="radio" name="memberType">
+								<span>사용자</span>
+							</label>
+							<label class="ml10">
+								<input type="radio" name="memberType">
+								<span>도서관</span>
+							</label>
+						</td>
+					</tr>
+					<tr>
+						<th>아이디</th>
+						<td>
+							<input class="tbox">
+						</td>
+					</tr>
+					<tr>
+						<th>비밀번호</th>
+						<td>
+							<input class="tbox">
+						</td>
+					</tr>
+					<tr>
+						<th>비밀번호 확인</th>
+						<td>
+							<input class="tbox">
+						</td>
+					</tr>
+					<tr>
+						<th>이름</th>
+						<td>
+							<input class="tbox">
+						</td>
+					</tr>
+					<tr>
+						<th>연락처</th>
+						<td>
+							<input class="tbox">
+						</td>
+					</tr>
+					<tr>
+						<th>주소</th>
+						<td>
+							<div class="addrBox">
+								<input class="tbox normal" readonly>
+								<a href="#none" class="btn table">주소검색</a>
+							</div>
+							<div class="addrBox">
+								<input class="tbox full" placeholder="상세주소 입력">
+							</div>
+						</td>
+					</tr>
+				</table>
+				<div class="btnGroup">
+					<a href="#none" class="btn">회원가입</a>
+				</div>
+			</div>
+		</section>
+	</div>
+	<footer>
+		First project in study 190513 : contact
+
+	</footer>
+</div>
+
+<script src="../js/jquery-3.1.1.min.js"></script>
+</body>
+</html>

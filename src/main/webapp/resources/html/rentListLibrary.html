@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">	<title>study_contact</title>
+	<link rel="stylesheet" type="text/css" href="../css/reset.css">
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+</head>
+<body>
+<div class="container">
+	<header>
+		<a href="index.html" class="logo">STUDY-LIBIRARY</a>
+		<div class="menu">
+			<a href="login.html">로그인</a>
+			<a href="join.html">회원가입</a>
+		</div>
+	</header>
+	<div class="content">
+		<div class="subMenu">
+			<a href="bookSearch.html">도서 검색</a>
+			<a href="rentListMember.html">대여 내역</a>
+			<a href="myInfoChk.html">내 정보수정</a>
+			<a href="leave.html">회원 탈퇴</a>
+		</div>
+
+		<section>
+			<div class="bookSearchGroup">
+				<span class="sbox">
+					<select>
+						<option>제목</option>
+						<option>저자</option>
+						<option>출판사</option>
+					</select>
+				</span>
+				<span class="sbox">
+					<select>
+						<option>장르</option>
+						<option>A</option>
+						<option>B</option>
+					</select>
+				</span>
+				<input class="tbox">
+				<a href="#none" class="btn table">검색</a>
+			</div>
+			<div class="bookListGroup">
+				<div class="sectionTitle">대출 관리</div>
+				<table class="list">
+					<tr>
+						<th>번호</th>
+						<th>제목</th>
+						<th>저자</th>
+						<th>대여인 정보</th>
+						<th>대여일</th>
+						<th>반납예정일</th>
+						<th>반납일</th>
+						<th>상태</th>
+						<th>관리</th>
+					</tr>
+					<tr>
+						<td>1</td>
+						<td>Clean Code Clean Code</td>
+						<td>최희수</td>
+						<td>yook123 / 이윤석 / 010-1234-5678</td>
+						<td>19-05-02</td>
+						<td>19-05-09</td>
+						<td></td>
+						<td>대출중</td>
+						<td>
+							<a href="#none" class="btn main">반납완료</a>
+						</td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>Clean Code Clean Code</td>
+						<td>최희수</td>
+						<td>yook123 / 이윤석 / 010-1234-5678</td>
+						<td>19-05-02</td>
+						<td>19-05-09</td>
+						<td></td>
+						<td>반납</td>
+						<td>
+<!--							<a href="#none" class="btn main">반납완료</a>-->
+						</td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>Clean Code Clean Code</td>
+						<td>최희수</td>
+						<td>yook123 / 이윤석 / 010-1234-5678</td>
+						<td>19-05-02</td>
+						<td>19-05-09</td>
+						<td></td>
+						<td class="red">연체</td>
+						<td>
+							<a href="#none" class="btn main">반납완료</a>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="paging">
+				<a href="#none">이전</a>
+				<a href="#none" class="on">1</a>
+				<a href="#none">2</a>
+				<a href="#none">3</a>
+				<a href="#none">다음</a>
+			</div>
+		</section>
+	</div>
+	<footer>
+		Second project in study 190526 : library
+
+	</footer>
+</div>
+
+<script src="../js/jquery-3.1.1.min.js"></script>
+</body>
+</html>

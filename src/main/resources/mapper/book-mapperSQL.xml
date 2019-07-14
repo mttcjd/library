@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="book">
+	<insert id="insertBook" parameterType="book">
+		insert into 
+			book_tbl 
+		values(
+			book_seq.nextval,
+			#{bookLib},
+			#{bookName},
+			#{bookGenre},
+			#{bookPublisher},
+			#{bookAuthor},
+			#{bookPubDate},
+			#{bookLocation},
+			#{bookSerial},
+			#{bookState},
+			sysdate)
+	</insert>
+	<select id="totalCount" parameterType="search" resultType="_int">
+		select 
+			count(*) cnt 
+		from 
+			book_tbl
+	  	where
+	  		1=1
+	  		<if test="memberId!=null and memberId!=''">
+				and book_lib=#{memberId}
+			</if>
+			<if test="genre!=null and genre!=''">
+				and book_genre=#{genre}
+			</if>
+			<if test="searchVal != null and searchVal != ''">
+				<if test="searchType.equals('name')">
+					and LOWER(book_name) like LOWER('%'||#{searchVal}||'%')
+				</if>
+				<if test="searchType.equals('author')">
+					and LOWER(book_author) like LOWER('%'||#{searchVal}||'%')
+				</if>
+				<if test="searchType.equals('publisher')">
+					and LOWER(book_publisher) like LOWER('%'||#{searchVal}||'%')
+				</if>
+			</if>
+	
+	</select>
+	<select id="selectList" parameterType="search" resultType="book">
+		select 
+  			rnum,
+  			book_idx as bookIdx,
+	  		book_lib as bookLib,
+	  		book_name as bookName,
+	  		book_genre as bookGenre,
+	  		book_publisher as bookPublisher,
+	  		book_author as bookAuthor,
+	  		TO_CHAR(book_pub_date,'YYYY-MM-DD') as bookPubDate,
+	  		book_location as bookLocation,
+	  		book_serial as bookSerial,
+	  		book_state as bookState,
+	  		TO_CHAR(book_reg_date,'YYYY-MM-DD HH24:mi:ss') as bookRegDate
+	  	from ( select 
+	  				rownum rnum,
+	  				b.* 
+	  			from (select * from book_tbl
+	  			where 
+	  				1=1
+			  		<if test="memberId!=null and memberId!=''">
+						and book_lib=#{memberId}
+					</if>
+	  				<if test="genre!=null and genre!=''">
+						and book_genre=#{genre}
+					</if>
+					<if test="searchVal != null and searchVal != ''">
+						<if test="searchType.equals('name')">
+							and LOWER(book_name) like LOWER('%'||#{searchVal}||'%')
+						</if>
+						<if test="searchType.equals('author')">
+							and LOWER(book_author) like LOWER('%'||#{searchVal}||'%')
+						</if>
+						<if test="searchType.equals('publisher')">
+							and LOWER(book_publisher) like LOWER('%'||#{searchVal}||'%')
+						</if>
+					</if>
+				<choose>
+					<when test="sort!=null and sort!=''">
+						order by book_location
+					</when>
+					<otherwise>
+						order by 1 desc
+					</otherwise>
+				</choose>
+	  			) b
+  			 )
+  		where 
+  			rnum between #{start} and #{end}
+  	</select>
+  	<!-- 메인 페이지 최신 도서 -->
+  	<select id="recentList" resultType="book">
+  		select 
+  			book_idx as bookIdx,
+	  		book_lib as bookLib,
+	  		member_name as libName,
+	  		book_name as bookName,
+	  		book_genre as bookGenre,
+	  		book_publisher as bookPublisher,
+	  		book_author as bookAuthor,
+	  		TO_CHAR(book_pub_date,'YYYY-MM-DD') as bookPubDate,
+	  		book_location as bookLocation,
+	  		book_serial as bookSerial,
+	  		book_state as bookState,
+	  		TO_CHAR(book_reg_date,'YYYY-MM-DD HH24:mi:ss') as bookRegDate
+	  	from ( select 
+	  				rownum rnum,
+	  				b.*
+	  			from 
+	  				(select * from book_tbl bt,MEMBER_TBL mt where bt.book_lib=mt.member_id order by 1 desc) b
+  			 )
+  		where 
+  			rnum between 1 and 5
+  	</select>
+  	<select id="selectBook" parameterType="_int" resultType="book">
+  		select 
+  			book_idx as bookIdx,
+	  		book_lib as bookLib,
+	  		member_name as libName,
+	  		book_name as bookName,
+	  		book_genre as bookGenre,
+	  		book_publisher as bookPublisher,
+	  		book_author as bookAuthor,
+	  		TO_CHAR(book_pub_date,'YYYY-MM-DD') as bookPubDate,
+	  		book_location as bookLocation,
+	  		book_serial as bookSerial,
+	  		book_state as bookState,
+	  		book_reserve_id as bookReserveId,
+	  		TO_CHAR(book_reg_date,'YYYY-MM-DD HH24:mi:ss') as bookRegDate
+	  	from
+	  		book_tbl bt, MEMBER_TBL mt 
+        where 
+            bt.book_lib = mt.member_id
+            and book_idx = #{no}
+  	</select>
+  	<select id="getRentId" parameterType="_int" resultType="rent">
+  		select 
+            RENT_ID as rentId,
+            TO_CHAR(due_date,'YYYY.MM.DD') as dueDate
+	  	from
+	  		rent_tbl
+        where 
+            rent_book = #{no}
+            and RETURN_DATE is null
+  	</select>
+  	
+  	<select id="totalRent" parameterType="search" resultType="_int">
+  		select 
+			count(*) cnt 
+		from 
+			rent_tbl r, book_tbl b, member_tbl m
+	  	where 
+	  		r.rent_book = b.book_idx
+	  		and b.book_lib = m.member_id
+			and rent_id = #{memberId}
+  	</select>
+  	<select id="selectRent" parameterType="search" resultType="rent">
+  		select 
+  			rnum,
+  			rent_idx as rentIdx,
+  			rent_book as rentBook,
+  			member_name as memberName,
+  			book_name as bookName,
+            book_genre as bookGenre,
+            book_author as bookAuthor,
+            book_publisher as bookPublisher,
+            TO_CHAR(book_pub_date,'YYYY-MM-DD') as bookPubDate,
+  			TO_CHAR(rent_date,'YYYY-MM-DD') as rentDate,
+  			TO_CHAR(due_date,'YYYY-MM-DD') as dueDate,
+  			TO_CHAR(return_date,'YYYY-MM-DD') as returnDate
+	  	from ( select 
+	  				rownum rnum,
+	  				rt.* 
+	  			from (select * from rent_tbl r, book_tbl b, member_tbl m
+	  			where 
+	  				r.rent_book = b.book_idx
+			  		and b.book_lib = m.member_id
+					and rent_id = #{memberId}
+	  			order by 1 desc
+	  			
+	  			) rt
+  			 )
+  		where 
+  			rnum between #{start} and #{end}
+  	</select>
+  	<insert id="rentBook" parameterType="rent">
+  		insert into
+  			rent_tbl
+  		values
+  			(rent_seq.nextval,
+  			#{rentId},
+  			#{rentBook},
+  			sysdate,
+  			sysdate+7,
+  			null,
+  			0
+  			)
+  	</insert>
+  	<update id="updateState" parameterType="_int">
+  		update
+  			book_tbl
+  		set
+  			book_state = 1
+  		where
+  			book_idx = #{bookIdx}
+  	</update>
+  	<update id="updateBook" parameterType="book">
+  		update
+  			book_tbl
+  		set
+  			book_genre = #{bookGenre},
+  			book_name = #{bookName},
+  			book_publisher = #{bookPublisher},
+  			book_author = #{bookAuthor},
+  			book_pub_date = #{bookPubDate},
+  			book_location = #{bookLocation},
+  			book_serial = #{bookSerial},
+  			book_state = #{bookState}
+  		where
+  			book_idx = #{bookIdx}
+  	</update>
+</mapper>

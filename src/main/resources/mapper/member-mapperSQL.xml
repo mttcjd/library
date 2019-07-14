@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="member">
+	<select id="login" parameterType="loginMem" resultType="member">
+		select
+			member_idx as memberIdx,
+			member_id as memberId,
+			member_pw as memberPw,
+			member_type as memberType,
+			member_name as memberName,
+			phone,
+			addr1,
+			addr2,
+			enroll_date as enrollDate,
+			stop_date as stopDate,
+			state
+		from
+			member_tbl
+		where
+			member_id = #{memberId}
+			and member_pw = #{memberPw}
+			and member_type = #{memberType}
+	</select>
+	<select id="getLibrary" resultType="member">
+		select
+			member_id as memberId,
+			member_name as memberName
+		from
+			member_tbl
+		where
+			member_type = 1
+		order by 1
+	</select>
+	<insert id="join" parameterType="member">
+		insert into
+			member_tbl
+		values
+			(member_seq.nextval,
+			#{memberId},
+			#{memberPw},
+			#{memberType},
+			#{memberName},
+			#{phone},
+			#{addr1},
+			#{addr2},
+			sysdate,
+			null,
+			0
+			)
+	</insert>
+</mapper>
